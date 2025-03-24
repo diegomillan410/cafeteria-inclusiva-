@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Inclusivo - Experiencia para Todos</title>
+    <style>
+        /* Variables para facilitar cambios de tema */
+        :root {
+            --color-primary: #6b4226;
+            --color-secondary: #a67c52;
+            --color-accent: #d4a373;
+            --color-background: #faf3e0;
+            --color-text: #2b2b2b;
+            --color-text-light: #f5f5f5;
+            --font-primary: Arial, Helvetica, sans-serif;
+            --border-radius: 8px;
+        }
+
+        /* Estilos para alto contraste (se activarían con JavaScript) */
+        .high-contrast {
+            --color-primary: #000000;
+            --color-secondary: #333333;
+            --color-accent: #555555;
+            --color-background: #ffffff;
+            --color-text: #000000;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Para mejorar la navegación con teclado */
+        a:focus, button:focus {
+            outline: 3px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-primary);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        header {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover, nav a:focus {
+            background-color: var(--color-secondary);
+        }
+
+        .accessibility-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .accessibility-controls button {
+            background-color: var(--color-secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .hero {
+            background-image: url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background-color: var(--color-accent);
+            color: var(--color-text);
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover, .cta-button:focus {
+            background-color: var(--color-secondary);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .feature img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .menu-preview {
+            margin: 3rem 0;
+        }
+
+        .menu-preview h2 {
+            text-align: center;
+            color: var(--color-primary);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+        }
+
+        .price {
+            font-weight: bold;
+            color: var(--color-secondary);
+            margin: 0.5rem 0;
+        }
+
+        .testimonials {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            color: var(--color-primary);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .testimonial {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial blockquote {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin: 0 0 1rem 0;
+        }
+
+        .testimonial cite {
+            font-weight: bold;
+            color: var(--color-secondary);
+        }
+
+        .about-us {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+            align-items: center;
+        }
+
+        .about-us img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .about-us-content h2 {
+            color: var(--color-primary);
+            margin-top: 0;
+        }
+
+        footer {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--color-text-light);
+            text-decoration: none;
+        }
+
+        .footer-section a:hover, .footer-section a:focus {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover, .social-links a:focus {
+            background-color: var(--color-accent);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-secondary);
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            .about-us {
+                grid-template-columns: 1fr;
+            }
+
+            .accessibility-controls {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <header>
+        <div class="logo">
+            <img src="/api/placeholder/60/60" alt="Logo de Café Inclusivo" />
+            <h1>Café Inclusivo</h1>
+        </div>
+        
+        <nav aria-label="Navegación principal">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#menu">Menú</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        
+        <div class="accessibility-controls">
+            <button id="contrast-toggle" aria-label="Cambiar contraste">
+                Contraste
+            </button>
+            <button id="font-size-increase" aria-label="Aumentar tamaño de texto">
+                A+
+            </button>
+            <button id="font-size-decrease" aria-label="Disminuir tamaño de texto">
+                A-
+            </button>
+        </div>
+    </header>
+    
+    <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero-content">
+            <h2 id="hero-heading">Una experiencia de café para todos</h2>
+            <p>En Café Inclusivo, creemos que todos merecen disfrutar de una excelente experiencia gastronómica sin barreras.</p>
+            <button class="cta-button">Conoce nuestro menú</button>
+        </div>
+    </section>
+    
+    <main id="main-content">
+        <section class="features" aria-labelledby="features-heading">
+            <h2 id="features-heading" class="visually-hidden">Nuestras características</h2>
+            
+            <div class="feature">
+                <img src="/api/placeholder/80/80" alt="Icono de accesibilidad" />
+                <h3>Accesibilidad Total</h3>
+                <p>Nuestro local está diseñado para ser 100% accesible, con rampas, baños adaptados y espacios amplios para circular.</p>
+            </div>
+            
+            <div class="feature">
+                <img src="/api/placeholder/80/80" alt="Icono de menú inclusivo" />
+                <h3>Menú para Todos</h3>
+                <p>Opciones para dietas especiales: sin gluten, veganas, bajas en azúcar y adaptables a necesidades específicas.</p>
+            </div>
+            
+            <div class="feature">
+                <img src="/api/placeholder/80/80" alt="Icono de personal capacitado" />
+                <h3>Personal Capacitado</h3>
+                <p>Nuestro equipo está formado para atender adecuadamente a personas con diversas necesidades y capacidades.</p>
+            </div>
+        </section>
+        
+        <section class="menu-preview" aria-labelledby="menu-heading">
+            <h2 id="menu-heading">Nuestro Menú</h2>
+            
+            <div class="menu-items">
+                <article class="menu-item">
+                    <img src="/api/placeholder/300/200" alt="Café especial con leche de almendras" />
+                    <div class="menu-item-content">
+                        <h3>Café Especial</h3>
+                        <p>Nuestro café de especialidad, disponible con diversas opciones de leche vegetal.</p>
+                        <p class="price">$3.50</p>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <img src="/api/placeholder/300/200" alt="Pastel sin gluten de chocolate" />
+                    <div class="menu-item-content">
+                        <h3>Pastel Sin Gluten</h3>
+                        <p>Delicioso pastel de chocolate elaborado con ingredientes sin gluten de alta calidad.</p>
+                        <p class="price">$4.75</p>
+                    </div>
+                </article>
+                
+                <article class="menu-item">
+                    <img src="/api/placeholder/300/200" alt="Sandwich vegano en pan artesanal" />
+                    <div class="menu-item-content">
+                        <h3>Sandwich Vegano</h3>
+                        <p>Pan artesanal con vegetales frescos y proteína vegetal de nuestra propia elaboración.</p>
+                        <p class="price">$6.25</p>
+                    </div>
+                </article>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="cta-button">Ver menú completo</button>
+            </div>
+        </section>
+        
+        <section class="testimonials" aria-labelledby="testimonials-heading">
+            <h2 id="testimonials-heading">Lo que dicen nuestros clientes</h2>
+            
+            <div class="testimonial">
+                <blockquote>
+                    "Por fin un lugar donde puedo disfrutar un café con mis amigos sin preocuparme por la accesibilidad. El personal es increíblemente atento y el café es delicioso. ¡Gracias por crear este espacio para todos!"
+                </blockquote>
+                <cite>- María García, cliente habitual</cite>
+            </div>
+        </section>
+        
+        <section class="about-us" aria-labelledby="about-heading">
+            <img src="/api/placeholder/600/400" alt="Interior de nuestra cafetería mostrando un espacio accesible y acogedor" />
+            
+            <div class="about-us-content">
+                <h2 id="about-heading">Nuestra Historia</h2>
+                <p>Café Inclusivo nació en 2022 con la misión de crear un espacio gastronómico donde todas las personas, independientemente de sus capacidades o necesidades especiales, pudieran disfrutar de una experiencia plena.</p>
+                <p>Fundado por un equipo diverso de amantes del café, nuestro objetivo es derribar barreras y demostrar que la inclusión no solo es posible, sino que enriquece la experiencia de todos.</p>
+                <button class="cta-button">Conoce más sobre nosotros</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Café Inclusivo</h3>
+                <p>Creando experiencias gastronómicas accesibles para todos.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Síguenos en Facebook">FB</a>
+                    <a href="#" aria-label="Síguenos en Instagram">IG</a>
+                    <a href="#" aria-label="Síguenos en Twitter">TW</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Horario</h3>
+                <ul>
+                    <li>Lunes a Viernes: 7:00 - 21:00</li>
+                    <li>Sábados y Domingos: 8:00 - 22:00</li>
+                    <li>Días festivos: 9:00 - 20:00</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contáctanos</h3>
+                <ul>
+                    <li>Dirección: Av. Inclusión 123, Ciudad</li>
+                    <li>Teléfono: (123) 456-7890</li>
+                    <li>Email: info@cafeinclusivo.com</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Enlaces rápidos</h3>
+                <ul>
+                    <li><a href="#menu">Nuestro Menú</a></li>
+                    <li><a href="#reservaciones">Reservaciones</a></li>
+                    <li><a href="#accesibilidad">Guía de Accesibilidad</a></li>
+                    <li><a href="#empleo">Trabaja con Nosotros</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 Café Inclusivo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Función para cambiar el contraste
+        document.getElementById('contrast-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+        });
+        
+        // Funciones para cambiar el tamaño del texto
+        let currentFontSize = 16;
+        
+        document.getElementById('font-size-increase').addEventListener('click', function() {
+            if (currentFontSize < 24) {
+                currentFontSize += 2;
+                document.body.style.fontSize = currentFontSize + 'px';
+            }
+        });
+        
+        document.getElementById('font-size-decrease').addEventListener('click', function() {
+            if (currentFontSize > 14) {
+                currentFontSize -= 2;
+                document.body.style.fontSize = currentFontSize + 'px';
+            }
+        });
+    </script>
+</body>
+</html>
